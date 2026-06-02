@@ -580,16 +580,22 @@
             background: linear-gradient(180deg, var(--black) 0%, rgba(20, 20, 20, 0.8) 100%);
         }
 
-        .pricing-card {
-            max-width: 620px;
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            max-width: 900px;
             margin: 0 auto;
+        }
+
+        .pricing-card {
             background: var(--black-card);
             border: 1px solid rgba(204, 255, 0, 0.15);
             border-radius: 24px;
-            padding: 56px;
+            padding: 48px 36px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .pricing-card::before {
@@ -811,50 +817,25 @@
             color: var(--neon-dim);
         }
 
-        /* ============================================
-           TESTIMONIAL
-           ============================================ */
-        .testimonial-section {
-            background: rgba(20, 20, 20, 0.4);
-            border-top: 1px solid var(--black-border);
-            border-bottom: 1px solid var(--black-border);
+        .pricing-card.featured {
+            border-color: rgba(204, 255, 0, 0.3);
+            box-shadow: 0 0 40px rgba(204, 255, 0, 0.06);
         }
 
-        .testimonial-card {
-            max-width: 760px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .testimonial-quote {
-            font-family: var(--font-display);
-            font-size: 1.6rem;
-            font-weight: 500;
-            line-height: 1.6;
-            margin-bottom: 32px;
-            letter-spacing: -0.01em;
-            position: relative;
-        }
-
-        .testimonial-quote::before {
-            content: '"';
-            font-size: 6rem;
-            color: var(--neon);
-            opacity: 0.2;
+        .pricing-popular {
             position: absolute;
-            top: -40px;
+            top: -14px;
             left: 50%;
             transform: translateX(-50%);
-            font-family: Georgia, serif;
-        }
-
-        .testimonial-author {
-            font-size: 0.9rem;
-            color: var(--white-muted);
-        }
-
-        .testimonial-author strong {
-            color: var(--white);
+            background: var(--neon);
+            color: var(--black);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 5px 18px;
+            border-radius: 100px;
+            z-index: 2;
         }
 
         /* ============================================
@@ -940,6 +921,7 @@
             .hero-image-container { width: 280px; height: 280px; border-radius: 24px; }
             .float-card { display: none; }
             .services-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
             .pricing-card { padding: 36px 24px; }
             .pricing-amount { font-size: 3.5rem; }
             .section { padding: 64px 20px; }
@@ -960,6 +942,216 @@
         .reveal.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* ============================================
+           BOOKING MODAL
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--black-card);
+            border: 1px solid rgba(204, 255, 0, 0.15);
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 520px;
+            width: 100%;
+            position: relative;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 36px; height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--white-muted);
+            transition: all var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--white);
+        }
+
+        .modal h2 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .modal .modal-tier {
+            color: var(--neon);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--white-dim);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-sm);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: border-color var(--transition);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: rgba(204, 255, 0, 0.4);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--white-muted);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        .form-group select option {
+            background: var(--black-card);
+            color: var(--white);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--neon);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--neon-glow-strong);
+        }
+
+        .modal-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .modal-submit .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(0,0,0,0.2);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .modal-submit.loading .spinner {
+            display: block;
+        }
+
+        .modal-submit.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .modal-note {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--white-muted);
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        @media (max-width: 640px) {
+            .modal { padding: 32px 24px; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1076,6 +1268,7 @@
                     </p>
                     <div class="about-tags">
                         <span class="about-tag">Innovation Strategy</span>
+                        <span class="about-tag">Personal Growth</span>
                         <span class="about-tag">Leadership</span>
                         <span class="about-tag">LISA Consortium</span>
                         <span class="about-tag">Emerging Tech</span>
@@ -1091,16 +1284,37 @@
         <div class="section-inner">
             <div class="section-header reveal">
                 <span class="section-label">What You Get</span>
-                <h2 class="section-title">Strategic Coaching, Personalized</h2>
-                <p class="section-desc">Every session is tailored to your specific challenges. Here's what to expect from working with Spencer.</p>
+                <h2 class="section-title">Coaching for Every Stage</h2>
+                <p class="section-desc">Whether you're navigating a career transition or scaling organizational innovation, Spencer meets you where you are.</p>
             </div>
             <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <h3>Career Gap Navigation</h3>
+                    <p>Feeling stuck between roles? Get clarity on your next move with strategic guidance tailored for millennials re-entering the workforce or pivoting careers.</p>
+                </div>
                 <div class="service-card reveal">
                     <div class="service-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     </div>
                     <h3>Innovation Roadmapping</h3>
                     <p>Build a clear, actionable innovation strategy aligned with your organization's goals and market opportunity. Move from vision to execution.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </div>
+                    <h3>Personal Growth &amp; Resilience</h3>
+                    <p>Build the mindset and emotional toolkit to thrive through transitions. Develop confidence, direction, and a personal narrative that opens doors.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <h3>Unconventional Scientists</h3>
+                    <p>Advice for scientists from non-traditional backgrounds looking to find their footing. Leverage your unique perspective as a competitive advantage.</p>
                 </div>
                 <div class="service-card reveal">
                     <div class="service-icon">
@@ -1111,44 +1325,11 @@
                 </div>
                 <div class="service-card reveal">
                     <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <h3>Leadership Development</h3>
-                    <p>Develop the mindset and skills to lead innovation effectively. Build resilience, foster creative teams, and drive transformational change.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    </div>
-                    <h3>Process Innovation</h3>
-                    <p>Redesign workflows and processes to unlock efficiency gains. Implement frameworks that accelerate experimentation and delivery.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                    </div>
-                    <h3>Research Translation</h3>
-                    <p>Bridge the gap between cutting-edge research and practical application. Leverage LISA Consortium insights for real-world competitive advantage.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                     </div>
-                    <h3>Growth Strategy</h3>
-                    <p>Identify high-impact growth opportunities. Build scalable innovation pipelines that create sustained competitive advantage over time.</p>
+                    <h3>Organizational Growth</h3>
+                    <p>Identify high-impact growth opportunities and build scalable innovation pipelines to future-proof your organization.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== TESTIMONIAL ========== -->
-    <section class="section testimonial-section">
-        <div class="section-inner">
-            <div class="testimonial-card reveal">
-                <p class="testimonial-quote">
-                    Spencer's unique perspective as both a CIO and research consortium member brings a rare combination of practical leadership and cutting-edge insight to every conversation.
-                </p>
-                <p class="testimonial-author"><strong>Innovation Leader</strong> · Previous Coaching Client</p>
             </div>
         </div>
     </section>
@@ -1158,50 +1339,151 @@
         <div class="section-inner">
             <div class="section-header reveal">
                 <span class="section-label">Invest in Your Growth</span>
-                <h2 class="section-title">Book a Coaching Session</h2>
-                <p class="section-desc">A focused, 1-on-1 session designed to accelerate your innovation journey.</p>
+                <h2 class="section-title">Choose Your Path</h2>
+                <p class="section-desc">Whether you're navigating a personal career transition or driving innovation at scale, there's a session for you.</p>
             </div>
-            <div class="pricing-card reveal">
-                <span class="pricing-label">1-on-1 Session</span>
-                <h3 class="pricing-title">Innovation Coaching</h3>
-                <p class="pricing-subtitle">Personalized strategic guidance</p>
-                <div class="pricing-amount">
-                    <span class="currency">$</span>80
+            <div class="pricing-grid">
+                <!-- CARD 1: Career Gap Coaching -->
+                <div class="pricing-card reveal">
+                    <span class="pricing-label">Individual</span>
+                    <h3 class="pricing-title">Personal Coaching</h3>
+                    <p class="pricing-subtitle">For individuals navigating life transitions</p>
+                    <div class="pricing-amount">
+                        <span class="currency">$</span>80
+                    </div>
+                    <p class="pricing-per">per session</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Dedicated 1-on-1 time with Spencer
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Career gap &amp; life transition support
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Advice for scientists of unconventional backgrounds
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Personal growth &amp; resilience frameworks
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Career grief navigation
+                        </li>
+                    </ul>
+                    <button id="checkout-career" class="btn-checkout" onclick="handleCheckout('career')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Book &amp; Pay — $80
+                    </button>
+                    <p class="stripe-note">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        Secure payment via Venmo
+                    </p>
                 </div>
-                <p class="pricing-per">per session</p>
-                <ul class="pricing-features">
-                    <li>
-                        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Dedicated 1-on-1 time with Spencer
-                    </li>
-                    <li>
-                        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Customized to your specific challenges
-                    </li>
-                    <li>
-                        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Actionable takeaways & follow-up notes
-                    </li>
-                    <li>
-                        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Access to LISA research insights
-                    </li>
-                    <li>
-                        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Innovation frameworks & resources
-                    </li>
-                </ul>
-                <button id="checkout-btn" class="btn-checkout" onclick="handleCheckout()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    Book &amp; Pay — $80
-                </button>
-                <p class="stripe-note">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    Secure payment via Stripe
-                </p>
+                <!-- CARD 2: Organizational Innovation -->
+                <div class="pricing-card featured reveal" style="position: relative;">
+                    <span class="pricing-popular">Most Impact</span>
+                    <span class="pricing-label">Organization</span>
+                    <h3 class="pricing-title">Innovation Coaching</h3>
+                    <p class="pricing-subtitle">For teams &amp; organizational leaders</p>
+                    <div class="pricing-amount">
+                        <span class="currency">$</span>500
+                    </div>
+                    <p class="pricing-per">per session</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Extended deep-dive session with Spencer
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Innovation strategy &amp; roadmapping
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Technology assessment &amp; emerging trends
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Organizational design frameworks
+                        </li>
+                        <li>
+                            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            CIO-level strategic guidance
+                        </li>
+                    </ul>
+                    <button id="checkout-org" class="btn-checkout" onclick="handleCheckout('org')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Book &amp; Pay — $500
+                    </button>
+                    <p class="stripe-note">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        Secure payment via Venmo
+                    </p>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- ========== BOOKING MODAL ========== -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <h2>Book Your Session</h2>
+            <p class="modal-tier" id="modal-tier-label"></p>
+            <form id="booking-form">
+                <input type="hidden" name="tier" id="form-tier">
+                <input type="hidden" name="amount" id="form-amount">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="form-name">Name</label>
+                        <input type="text" id="form-name" name="name" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-email">Email</label>
+                        <input type="email" id="form-email" name="email" placeholder="you@email.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="form-date">Friday</label>
+                        <input type="date" id="form-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-time">Time Slot</label>
+                        <select id="form-time" name="time" required>
+                            <option value="" disabled selected>Select a time</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                            <option value="3:00 PM">3:00 PM</option>
+                            <option value="4:00 PM">4:00 PM</option>
+                            <option value="5:00 PM">5:00 PM</option>
+                            <option value="6:00 PM">6:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="form-note">Note (optional)</label>
+                    <textarea id="form-note" name="note" placeholder="What would you like to focus on?"></textarea>
+                </div>
+                <button type="submit" class="modal-submit" id="modal-submit-btn">
+                    <span class="btn-text">Confirm &amp; Pay via Venmo</span>
+                    <span class="spinner"></span>
+                </button>
+                <p class="modal-note">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Booking details sent to Spencer · Venmo opens for payment
+                </p>
+            </form>
+        </div>
+    </div>
 
     <!-- ========== FOOTER ========== -->
     <footer class="footer">
@@ -1244,20 +1526,104 @@
             }
         });
 
-        // ---- Stripe Checkout ----
-        // TODO: Replace with your Stripe Payment Link or Checkout Session URL
-        function handleCheckout() {
-            // OPTION 1: Stripe Payment Link (simplest — paste your link here)
-            // window.location.href = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+        // ---- Booking Modal ----
+        let currentTier = null;
 
-            // OPTION 2: Placeholder until Stripe is connected
-            alert('Stripe checkout will be connected here. Replace the URL in handleCheckout() with your Stripe Payment Link.');
+        const tierConfig = {
+            career: { label: 'Personal Coaching — $80', amount: 80, name: 'Personal Coaching Session' },
+            org:    { label: 'Organizational Innovation Coaching — $500', amount: 500, name: 'Organizational Innovation Coaching Session' }
+        };
 
-            // OPTION 3: Stripe Checkout via API (requires backend)
-            // fetch('/create-checkout-session', { method: 'POST' })
-            //     .then(res => res.json())
-            //     .then(data => { window.location.href = data.url; });
+        function handleCheckout(tier) {
+            currentTier = tier;
+            const config = tierConfig[tier];
+            document.getElementById('modal-tier-label').textContent = config.label;
+            document.getElementById('form-tier').value = config.name;
+            document.getElementById('form-amount').value = '$' + config.amount;
+            document.getElementById('booking-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setupDatePicker();
         }
+
+        function closeModal() {
+            document.getElementById('booking-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on overlay click
+        document.getElementById('booking-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ---- Friday-only date picker ----
+        function setupDatePicker() {
+            const dateInput = document.getElementById('form-date');
+            // Set min date to next Friday
+            const today = new Date();
+            const daysUntilFriday = (5 - today.getDay() + 7) % 7 || 7;
+            const nextFriday = new Date(today);
+            nextFriday.setDate(today.getDate() + daysUntilFriday);
+            dateInput.min = nextFriday.toISOString().split('T')[0];
+
+            // Max ~3 months out (rolls forward automatically)
+            const maxDate = new Date(nextFriday);
+            maxDate.setDate(maxDate.getDate() + 90);
+            dateInput.max = maxDate.toISOString().split('T')[0];
+
+            // step=7 from a Friday ensures only Fridays are selectable
+            dateInput.step = 7;
+        }
+
+        // ---- Form Submission ----
+        document.getElementById('booking-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('modal-submit-btn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            const formData = new FormData(this);
+
+            try {
+                // Send booking details to Spencer via Formspree
+                await fetch('https://formspree.io/f/mrednper', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                // Open Venmo with pre-filled amount
+                const config = tierConfig[currentTier];
+                const name = formData.get('name');
+                const date = formData.get('date');
+                const time = formData.get('time');
+                const venmoNote = encodeURIComponent(`${config.name} — ${name} — ${date} ${time}`);
+                const venmoUrl = `https://venmo.com/u/SpencerT1992?txn=pay&amount=${config.amount}&note=${venmoNote}`;
+                window.open(venmoUrl, '_blank');
+
+                // Show success & close
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                closeModal();
+                this.reset();
+
+                // Brief success feedback
+                const successMsg = document.createElement('div');
+                successMsg.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--neon);color:var(--black);padding:14px 28px;border-radius:100px;font-weight:600;font-size:0.95rem;z-index:2000;box-shadow:0 8px 32px rgba(204,255,0,0.3);';
+                successMsg.textContent = '✓ Booking sent! Complete payment on Venmo.';
+                document.body.appendChild(successMsg);
+                setTimeout(() => successMsg.remove(), 5000);
+
+            } catch (err) {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                alert('Something went wrong. Please try again or email Spencer directly.');
+            }
+        });
     </script>
 </body>
 </html>
